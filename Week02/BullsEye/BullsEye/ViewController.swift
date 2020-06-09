@@ -23,6 +23,7 @@ class ViewController: UIViewController {
         let roundedValue = bullsEyeGame.gameSlider.value.rounded()
         bullsEyeGame.currentValue = Int(roundedValue)
         bullsEyeGame.startNewGame()
+        updateLabelsFromModel()
     }
 
     @IBAction func showAlert() {
@@ -54,6 +55,7 @@ class ViewController: UIViewController {
         let action = UIAlertAction(title: "OK", style: .default, handler: {
           action in
             self.bullsEyeGame.startNewRound()
+            self.updateLabelsFromModel()
         })
 
         alert.addAction(action)
@@ -65,18 +67,22 @@ class ViewController: UIViewController {
     @IBAction func sliderMoved(_ slider: UISlider) {
         let roundedValue = bullsEyeGame.gameSlider.value.rounded()
         bullsEyeGame.currentValue = Int(roundedValue)
+        print("Target value: \(bullsEyeGame.targetValue)")
+        print("Slider value: \(slider.value)")
+        
     }
 
-    func updateLabels() {
+    func updateLabelsFromModel() {
         targetLabel.text = String(bullsEyeGame.targetValue)
         scoreLabel.text = String(bullsEyeGame.score)
         roundLabel.text = String(bullsEyeGame.round)
+        slider.value = bullsEyeGame.gameSlider.value
 
     }
 
     @IBAction func startNewGame() {
         bullsEyeGame.startNewRound()
-        updateLabels()
+        updateLabelsFromModel()
     }
   
 }

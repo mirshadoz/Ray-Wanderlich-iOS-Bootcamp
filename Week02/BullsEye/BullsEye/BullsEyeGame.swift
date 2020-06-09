@@ -14,7 +14,7 @@ class BullsEyeGame {
     var targetValue = BullsEyeGame.getTargetValue()
     var score: Int
     var round: Int
-    var gameSlider = Slider(value: 0.0)
+    var gameSlider = Slider(value: 25.0)
     
     
     static func getTargetValue() -> Int {
@@ -39,12 +39,7 @@ class BullsEyeGame {
         targetValue = Int.random(in: 1...100)
         currentValue = 50
         gameSlider.value = Float(currentValue)
-//        TODO: Add updateLabels() for UI
-        //      updateLabels()
     }
-
-
-
 
     
 }
