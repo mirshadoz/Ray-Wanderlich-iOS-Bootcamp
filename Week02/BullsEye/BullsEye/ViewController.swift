@@ -66,10 +66,7 @@ class ViewController: UIViewController {
 
     @IBAction func sliderMoved(_ slider: UISlider) {
         let roundedValue = bullsEyeGame.gameSlider.value.rounded()
-        bullsEyeGame.currentValue = Int(roundedValue)
-        print("Target value: \(bullsEyeGame.targetValue)")
-        print("Slider value: \(slider.value)")
-        
+        bullsEyeGame.currentValue = Int(roundedValue)        
     }
 
     func updateLabelsFromModel() {
