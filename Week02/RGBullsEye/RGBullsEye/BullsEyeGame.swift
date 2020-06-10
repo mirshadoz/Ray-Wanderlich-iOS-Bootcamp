@@ -56,16 +56,15 @@ class BullsEyeGame {  // might be class?
         return Float(colorNumber)
     }
     
-    func calculatePoints() -> Int {
-        var points = (1 - calculateDifference()) * 100
+    func calculatePoints() {
+        let points = (1 - calculateDifference()) * 100
                         
         score += Int(points.rounded())
         
-        return score
     }
     
     func calculateDifference() -> Double{
-        var guessRGB = RGB(r: Int(redSliderValue), g: Int(greenSliderValue), b: Int(blueSliderValue))
+        let guessRGB = RGB(r: Int(redSliderValue), g: Int(greenSliderValue), b: Int(blueSliderValue))
         
         return rgb.difference(target: guessRGB)
     }
