@@ -23,127 +23,105 @@
 import UIKit
 
 class ViewController: UIViewController {
-  @IBOutlet weak var targetLabel: UILabel!
-  @IBOutlet weak var targetTextLabel: UILabel!
-  @IBOutlet weak var guessLabel: UILabel!
-  
-  @IBOutlet weak var redLabel: UILabel!
-  @IBOutlet weak var greenLabel: UILabel!
-  @IBOutlet weak var blueLabel: UILabel!
-  
-  @IBOutlet weak var redSlider: UISlider!
-  @IBOutlet weak var greenSlider: UISlider!
-  @IBOutlet weak var blueSlider: UISlider!
-  
-  @IBOutlet weak var roundLabel: UILabel!
-  @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var targetLabel: UILabel!
+    @IBOutlet weak var targetTextLabel: UILabel!
+    @IBOutlet weak var guessLabel: UILabel!
+
+    @IBOutlet weak var redLabel: UILabel!
+    @IBOutlet weak var greenLabel: UILabel!
+    @IBOutlet weak var blueLabel: UILabel!
+
+    @IBOutlet weak var redSlider: UISlider!
+    @IBOutlet weak var greenSlider: UISlider!
+    @IBOutlet weak var blueSlider: UISlider!
+
+    @IBOutlet weak var roundLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
   
     let game = BullsEyeGame(round: 0, score: 0)
-    var rgb = RGB()
     
-    var redSliderValue = 128.0
-    var greenSliderValue = 128.0
-    var blueSliderValue = 128.0
-    
-    var randomRed: Float = 0
-    var randomGreen: Float = 0
-    var randomBlue: Float = 0
-    
-    var difference = 0.0
-  
-  @IBAction func aSliderMoved(sender: UISlider) {
+    @IBAction func aSliderMoved(sender: UISlider) {
     switch sender.tag {
-    case 1:
-        redSliderValue = Double(sender.value.rounded())
-        redLabel.text = String(redSliderValue)
-    case 2:
-        greenSliderValue = Double(sender.value.rounded())
-        greenLabel.text = String(greenSliderValue)
-    case 3:
-        blueSliderValue = Double(sender.value.rounded())
-        blueLabel.text = String(blueSliderValue)
-    default:
-        print("Wrong slider is moved! :)")
-    }
-    guessLabel.backgroundColor = UIColor(red: CGFloat(redSliderValue/255), green: CGFloat(greenSliderValue/255), blue: CGFloat(blueSliderValue/255), alpha: 1)
+        case 1:
+            game.redSliderValue = Double(sender.value.rounded())
+            redLabel.text = String(game.redSliderValue)
+        case 2:
+            game.greenSliderValue = Double(sender.value.rounded())
+            greenLabel.text = String(game.greenSliderValue)
+        case 3:
+            game.blueSliderValue = Double(sender.value.rounded())
+            blueLabel.text = String(game.blueSliderValue)
+        default:
+            print("Wrong slider is moved! :)")
+        }
+        guessLabel.backgroundColor = UIColor(red: CGFloat(game.redSliderValue/255), green: CGFloat(game.greenSliderValue/255), blue: CGFloat(game.blueSliderValue/255), alpha: 1)
 
-  }
-  
-  @IBAction func showAlert(sender: AnyObject) {
-    difference = calculateDifference()
-    let message = difference == 0.0 ? "Match!" : "No Match!"
-    let alert = UIAlertController(title: "RGB Picker", message: message, preferredStyle: .alert)
-            
-    let loginAction = UIAlertAction(title: "OK", style: .default) {
-        action in
-        self.calculatePoints()
-        self.startNewRound()
     }
-            
-    alert.addAction(loginAction)
-    
-    self.present(alert, animated: true, completion: nil)
-  }
   
-  @IBAction func startOver(sender: AnyObject) {
-    game.round = 0
-    game.score = 0
-    startNewRound()
-  }
+    @IBAction func showAlert(sender: AnyObject) {
+        game.difference = game.calculateDifference()
+        let message = game.difference == 0.0 ? "Match!" : "No Match!"
+        let alert = UIAlertController(title: "RGB Picker", message: message, preferredStyle: .alert)
+                
+        let loginAction = UIAlertAction(title: "OK", style: .default) {
+            action in
+            self.game.calculatePoints()
+            self.game.startNewRound()
+            self.updateView()
+            self.resetValues()
+        }
+                
+        alert.addAction(loginAction)
+
+        self.present(alert, animated: true, completion: nil)
+    }
   
-  func updateView() {
-    redLabel.text = String(redSliderValue)
-    greenLabel.text = String(greenSliderValue)
-    blueLabel.text = String(blueSliderValue)
-//    print("Generated RGB: \(randomRed) + \(randomGreen) + \(randomBlue)")
-    targetLabel.backgroundColor = UIColor(red: CGFloat(randomRed/255), green: CGFloat(randomGreen/255), blue: CGFloat(randomBlue/255), alpha: 1)
-    roundLabel.text = String("Round: \(game.round)")
-    scoreLabel.text = String("Score: \(game.score)")
-    
-  }
+    @IBAction func startOver(sender: AnyObject) {
+        game.round = 0
+        game.score = 0
+        game.startNewRound()
+        updateView()
+        resetValues()
+    }
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    redSlider.tag = 1
-    greenSlider.tag = 2
-    blueSlider.tag = 3
-    randomRed = Float(generateRandomColor())
-    randomGreen = Float(generateRandomColor())
-    randomBlue = Float(generateRandomColor())
-    rgb.r = Int(randomRed)
-    rgb.g = Int(randomGreen)
-    rgb.b = Int(randomBlue)
-    startNewRound()
-  }
-    
-    func generateRandomColor() -> Int {
-        let colorNumber = Int.random(in: 1...255)
-        return colorNumber
+    func updateView() {
+        redLabel.text = String(game.redSliderValue)
+        greenLabel.text = String(game.greenSliderValue)
+        blueLabel.text = String(game.blueSliderValue)
+        targetLabel.backgroundColor = UIColor(red: CGFloat(game.randomRed/255), green: CGFloat(game.randomGreen/255), blue: CGFloat(game.randomBlue/255), alpha: 1)
+        roundLabel.text = String("Round: \(game.round)")
+        scoreLabel.text = String("Score: \(game.score)")
     }
     
-    func startNewRound() {
-        game.round += 1
+    func resetValues() {
         redSlider.value = 127.0
         greenSlider.value = 127.0
         blueSlider.value = 127.0
         guessLabel.backgroundColor = UIColor(red: CGFloat(1), green: CGFloat(1), blue: CGFloat(1), alpha: 1)
+        redLabel.text = String(0.0)
+        greenLabel.text = String(0.0)
+        blueLabel.text = String(0.0)
 
+    }
+  
+    override func viewDidLoad() {
+    super.viewDidLoad()
+        redSlider.tag = 1
+        greenSlider.tag = 2
+        blueSlider.tag = 3
+        game.randomRed = game.generateRandomColor()
+        game.randomGreen = game.generateRandomColor()
+        game.randomBlue = game.generateRandomColor()
+        game.rgb.r = Int(game.randomRed)
+        game.rgb.g = Int(game.randomGreen)
+        game.rgb.b = Int(game.randomBlue)
+        game.startNewRound()
         updateView()
     }
     
-    func calculatePoints() -> Int {
-        var points = (1 - calculateDifference()) * 100
-                        
-        game.score += Int(points.rounded())
-        
-        return game.score
-    }
     
-    func calculateDifference() -> Double{
-        var guessRGB = RGB(r: Int(redSliderValue), g: Int(greenSliderValue), b: Int(blueSliderValue))
-        
-        return rgb.difference(target: guessRGB)
-    }
+    
+    
 
     
 }

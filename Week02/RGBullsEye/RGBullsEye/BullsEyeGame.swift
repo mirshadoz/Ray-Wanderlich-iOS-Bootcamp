@@ -25,6 +25,15 @@ import Foundation
 class BullsEyeGame {  // might be class?
     var round: Int
     var score: Int
+    var redSliderValue = 128.0
+    var greenSliderValue = 128.0
+    var blueSliderValue = 128.0
+    var randomRed: Float = 0
+    var randomGreen: Float = 0
+    var randomBlue: Float = 0
+    var rgb = RGB()
+
+    var difference = 0.0
     
     init(round: Int, score: Int) {
         self.round = round
@@ -33,8 +42,36 @@ class BullsEyeGame {  // might be class?
     
     func startNewRound() {
         round += 1
-        
+        randomRed = generateRandomColor()
+        randomGreen = generateRandomColor()
+        randomBlue = generateRandomColor()
+        rgb.r = Int(randomRed)
+        rgb.g = Int(randomGreen)
+        rgb.b = Int(randomBlue)
+
     }
+    
+    func generateRandomColor() -> Float {
+        let colorNumber = Int.random(in: 1...255)
+        return Float(colorNumber)
+    }
+    
+    func calculatePoints() -> Int {
+        var points = (1 - calculateDifference()) * 100
+                        
+        score += Int(points.rounded())
+        
+        return score
+    }
+    
+    func calculateDifference() -> Double{
+        var guessRGB = RGB(r: Int(redSliderValue), g: Int(greenSliderValue), b: Int(blueSliderValue))
+        
+        return rgb.difference(target: guessRGB)
+    }
+
+
+
 
     
     
