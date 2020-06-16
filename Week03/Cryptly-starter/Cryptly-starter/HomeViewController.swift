@@ -120,12 +120,8 @@ class HomeViewController: UIViewController{
   
   func isIncreased(for currentValue: Double, for previousValue: Double) -> Bool {
     let difference = currentValue - previousValue
-    if difference > 0 {
-      return true
-    } else {
-      return false
-    }
 
+    return difference > 0 ? true : false
   }
 
   
@@ -144,9 +140,18 @@ class HomeViewController: UIViewController{
   }
   
   func setView3Data() {
+    var decreasedCrypto: [CryptoCurrency] = []
+    
+    if let cryptoDataArray = cryptoData {
+      decreasedCrypto = cryptoDataArray.filter({ (crypto) -> Bool in
+        !isIncreased(for: crypto.currentValue, for: crypto.previousValue)
+      })
+      
+      view3TextLabel.text = getStringFromCryptoArray(for: decreasedCrypto)
+    }
   }
   
   @IBAction func switchPressed(_ sender: Any) {
-//    print("Here")
+
   }
 }
