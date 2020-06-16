@@ -97,23 +97,50 @@ class HomeViewController: UIViewController{
     view2TextLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
   }
   
-  func setView1Data() {
+  func getStringFromCryptoArray(for cryptoArray: [CryptoCurrency]) -> String {
     var namesOfCrypto: String?
-    if let cryptoDataArray2 = cryptoData {
-      
-      namesOfCrypto = cryptoDataArray2.reduce("") { (total, crypto) -> String in
-        total + crypto.name + ","
-        }.dropLast().replacingOccurrences(of: ",", with: ", ")
-    }
+        
+    namesOfCrypto = cryptoArray.reduce("") { (total, crypto) -> String in
+    total + crypto.name + ","
+    }.dropLast().replacingOccurrences(of: ",", with: ", ")
     
     if let cryptoNames = namesOfCrypto {
-        view1TextLabel.text = cryptoNames
+      return cryptoNames
+    } else {
+      return "Error!"
     }
-    
     
   }
   
+  func setView1Data() {
+    if let cryptoDataArray = cryptoData {
+        view1TextLabel.text = getStringFromCryptoArray(for: cryptoDataArray)
+    }
+  }
+  
+  func isIncreased(for currentValue: Double, for previousValue: Double) -> Bool {
+    let difference = currentValue - previousValue
+    if difference > 0 {
+      return true
+    } else {
+      return false
+    }
+
+  }
+
+  
   func setView2Data() {
+    var increasedCrypto: [CryptoCurrency] = []
+    
+    if let cryptoDataArray = cryptoData {
+      increasedCrypto = cryptoDataArray.filter({ (crypto) -> Bool in
+        isIncreased(for: crypto.currentValue, for: crypto.previousValue)
+      })
+      
+      view2TextLabel.text = getStringFromCryptoArray(for: increasedCrypto)
+    }
+    
+    
   }
   
   func setView3Data() {
