@@ -98,6 +98,19 @@ class HomeViewController: UIViewController{
   }
   
   func setView1Data() {
+    var namesOfCrypto: String?
+    if let cryptoDataArray2 = cryptoData {
+      
+      namesOfCrypto = cryptoDataArray2.reduce("") { (total, crypto) -> String in
+        total + crypto.name + ","
+        }.dropLast().replacingOccurrences(of: ",", with: ", ")
+    }
+    
+    if let cryptoNames = namesOfCrypto {
+        view1TextLabel.text = cryptoNames
+    }
+    
+    
   }
   
   func setView2Data() {
@@ -107,6 +120,6 @@ class HomeViewController: UIViewController{
   }
   
   @IBAction func switchPressed(_ sender: Any) {
-    print("Here")
+//    print("Here")
   }
 }
