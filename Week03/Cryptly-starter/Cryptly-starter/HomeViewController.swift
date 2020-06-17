@@ -32,7 +32,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, Themeable {
+class HomeViewController: UIViewController, Themeable {  
 
   @IBOutlet weak var view1: UIView!
   @IBOutlet weak var view2: UIView!
@@ -164,7 +164,7 @@ class HomeViewController: UIViewController, Themeable {
     NotificationCenter.default.removeObserver(self)
   }
   
-  @objc func themChanged() {
+  @objc func themeChanged() {
     view1.backgroundColor = ThemeManager.shared.currentTheme?.widgetBackgroundColor
     view2.backgroundColor = ThemeManager.shared.currentTheme?.widgetBackgroundColor
     view3.backgroundColor = ThemeManager.shared.currentTheme?.widgetBackgroundColor

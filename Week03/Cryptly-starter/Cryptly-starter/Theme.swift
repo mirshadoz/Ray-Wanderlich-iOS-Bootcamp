@@ -45,7 +45,7 @@ protocol Themeable {
   
   func registerForTheme()
   func unregisterForTheme()
-  func themChanged()  
+  func themeChanged()  
   
 }
 
