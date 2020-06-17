@@ -32,7 +32,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController{
+class HomeViewController: UIViewController, Themeable {
 
   @IBOutlet weak var view1: UIView!
   @IBOutlet weak var view2: UIView!
@@ -52,16 +52,16 @@ class HomeViewController: UIViewController{
     setView1Data()
     setView2Data()
     setView3Data()
-    
-    print(cryptoData)
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    registerForTheme()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
+    unregisterForTheme()
   }
 
   func setupViews() {
@@ -152,6 +152,39 @@ class HomeViewController: UIViewController{
   }
   
   @IBAction func switchPressed(_ sender: Any) {
+    themeSwitch.isOn ? ThemeManager.shared.set(theme: DarkTheme()) : ThemeManager.shared.set(theme: LightTheme())
+  }
+  
+  func registerForTheme() {
+    NotificationCenter.default.addObserver(self, selector: #selector(themeChanged), name: Notification.Name.init("themeChanged"), object: nil)
 
   }
+  
+  func unregisterForTheme() {
+    NotificationCenter.default.removeObserver(self)
+  }
+  
+  @objc func themChanged() {
+    view1.backgroundColor = ThemeManager.shared.currentTheme?.widgetBackgroundColor
+    view2.backgroundColor = ThemeManager.shared.currentTheme?.widgetBackgroundColor
+    view3.backgroundColor = ThemeManager.shared.currentTheme?.widgetBackgroundColor
+
+    //    Todo:
+    //     Set the layer’s border color to the current theme’s borderColor:
+    
+
+    
+    view1TextLabel.textColor = ThemeManager.shared.currentTheme?.textColor
+    view2TextLabel.textColor = ThemeManager.shared.currentTheme?.textColor
+    view3TextLabel.textColor = ThemeManager.shared.currentTheme?.textColor
+    
+    self.view.backgroundColor = ThemeManager.shared.currentTheme?.backgroundColor
+    
+    
+  }
+  
+  
+  
 }
+
+
